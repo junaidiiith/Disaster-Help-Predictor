@@ -48,8 +48,7 @@ global classifier
 def predict(tweet,classifier):
     tweet = tweet_classifier.preprocess(tweet)
     cnt = 0
-    temp = np.zeros(100,1)
-    print(tweet)
+    temp = np.zeros(100)
     for w in tweet:
         if w in list(classifier[8].wv.vocab):
             temp = np.add(temp,classifier[8].wv[w.lower()])
@@ -57,28 +56,31 @@ def predict(tweet,classifier):
     if cnt:
         embed_data = np.divide(temp,cnt)
 
-    print(embed_data)
-    clfs = [0,2,4,6]
-    pred = np.zeros(8)
-    for i in clfs:
-        pred += classifier[i+1]*classifier[i].predict_proba(embed_data)
-    print(pred)
-    pred_label = np.argmax(pred)
-    return classifier[9][pred_label]
+    # print(embed_data.shape)
+        clfs = [0,2,4,6]
+        pred = np.zeros(8)
+        for i in clfs:
+            pred = np.add(pred,classifier[i+1]*classifier[i].predict_proba(embed_data.reshape(1, -1)))
+        # print(pred)
+        pred_label = np.argmax(pred)
+        return pred_label
 
 
 def addToDatabase(tweet,classifier):
+
     cl = predict(tweet[0],classifier)
-    print("printing class ",cl)
-    text = tweet[0]
-    location = tweet[1]
-    if not location:
-        location = "None"
-    try:
-        post.Post(clss=cl,location=location,body=text).save()
-        p = post.Post.objects.all()
-    except BaseException as e:
-        print("Error while saving: ", str(e))
+    if cl:
+        text = tweet[0]
+        location = tweet[1]
+        if not location:
+            location = "None"
+        try:
+            Post(clss=cl,location=location,body=text).save()
+            if cl in [5,8]:
+                from blog.models.help_request import Request
+                Request(body=text).save()
+        except BaseException as e:
+            print("Error while saving: ", str(e))
 
 
 def reclassify():
@@ -120,7 +122,7 @@ class MyListener(StreamListener):
     def on_data(self, data):
         try:
             data = clean_tweet(data)
-            print(data)
+            # print(data)
             addToDatabase(data,self.classifier)
             print("Added tweet!")
             self.count += 1

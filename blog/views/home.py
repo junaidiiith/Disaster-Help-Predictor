@@ -8,14 +8,13 @@ from django.template.defaulttags import register
 def get_item(dictionary, key):
     return dictionary.get(key)
 
-NUM_OF_POSTS = 100
     
 def home(request, username=None):
     post_list = Post.objects.all().order_by('-pub_date')
 
-    paginator = Paginator(post_list, NUM_OF_POSTS)  # Show NUM_OF_PAGES posts per page
-    page = request.GET.get('page')
+    # paginator = Paginator(post_list, NUM_OF_POSTS)  # Show NUM_OF_PAGES posts per page
+    # page = request.GET.get('page')
 
-    posts = paginator.get_page(page)
+    # posts = paginator.get_page(page)
 
-    return render(request, 'blog/home.html', {'posts': posts,'classes':classes})
+    return render(request, 'blog/home.html', {'posts': post_list,'classes':classes})
