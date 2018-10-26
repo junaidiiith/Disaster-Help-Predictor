@@ -1,0 +1,27 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+    <div class="container">
+
+        <header class="jumbotron my-8">
+        <h1 class="display-3">A Warm Welcome!</h1>
+        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, ipsam, eligendi, in quo sunt possimus non incidunt odit vero aliquid similique quaerat nam nobis illo aspernatur vitae fugiat numquam repellat.</p>
+        </header>
+
+        <div class="row text-center">
+
+        <div class="col-lg-3 col-md-3 mb-4">
+          {% for post in posts %}
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title"><a href="{% url 'blog:post' post.pk %}">{{ post.body }}</h4>
+              <p class="card-text">Predicted class {{classes|get_item:post.clss}}</p>
+            </div>
+            <div class="card-footer">
+              <a href="{% url 'blog:post_clas' post.clss %}" class="btn btn-primary">Check more for {{classes|get_item:post.clss}}</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock content %}

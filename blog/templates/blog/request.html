@@ -1,0 +1,32 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+    <div class="container">
+
+        <!-- Post -->
+        <div class="jumbotron">
+
+            <!-- Post title -->
+            <h4>{{ req.body }}</h4>
+
+            {% if req.assigned_to %}
+            <div> Assigned to {{ req.assigned_to.first_name }} {{ req.assigned_to.last_name }} 
+            </div>
+            {% endif %}
+            <!-- Post body -->
+            <h3>{{ choices|get_item:req.status }}</h3>
+
+        </div>
+
+        <!-- Show Comment button only if User is authenticated -->
+        {% if is_volunteer %}
+
+            <!-- Comment button -->
+            <a href="{% url 'blog:resolution' request.pk %}" class="col-md-2 pull-right">
+                <button type="button" class="btn btn-primary btn-block">Resolution</button>
+            </a>
+
+        {% endif %}
+
+    </div>
+{% endblock content %}

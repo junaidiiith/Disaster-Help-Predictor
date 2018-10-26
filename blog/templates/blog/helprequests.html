@@ -1,0 +1,41 @@
+{% extends "blog/base.html" %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'blog/table.css' %}"/>
+<div class="caption">Requests</div>    
+        <div class="starter-template">
+            {% for req in rqsts %}
+                <div class="row">
+                    <input type="radio" name="expand">
+                    <a href="{% url 'blog:request' req.pk %}"><span class="cell primary" data-label="Vehicle">{{req.body.body}}</span></a>
+                    <span class="cell" data-label="Exterior">{{choices|get_item:req.status}}</span>
+                    {%if req.assigned_to %}
+                    <span class="cell" data-label="Interior">{{req.assigned_to.first_name}}, {{req.assigned_to.last_name}}</span>
+                    {% endif %}
+
+                    {%if not req.assigned_to %}
+                    <span class="cell" data-label="Interior">Not Assigned</span>
+                    {% endif %}
+                    <span class="cell" data-label="Engine">{{req.pub_date}}</span>
+                </div>
+            {% endfor %}
+        </div>
+        <!-- Pagination -->
+        <div class="pagination">
+            {% if rqsts.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ rqsts.previous_page_number }}">previous</a>
+            {% endif %}
+
+            {% if rqsts.paginator.num_pages != 1 %}
+                Page {{ rqsts.number }} of {{ rqsts.paginator.num_pages }}.
+            {% endif %}
+
+            {% if rqsts.has_next %}
+                <a href="?page={{ posts.next_page_number }}">next</a>
+                <a href="?page={{ posts.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </div>
+
+    </div>
+{% endblock content %}

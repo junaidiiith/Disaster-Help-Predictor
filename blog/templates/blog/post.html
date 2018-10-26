@@ -1,0 +1,42 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+    <div class="container">
+
+        <!-- Post -->
+        <div class="jumbotron">
+
+            <!-- Post title -->
+            <h1>{{ post.title }}</h1>
+
+            <div> Created {{ post.pub_date }}
+            </div>
+
+            <!-- Post body -->
+            <h3>{{ post.body }}</h3>
+
+            <!-- Show Update and Delete button only if User is the owner of the Post -->
+
+        </div>
+
+        <h2>Top Voted classes </h2>
+
+        <!-- Comments -->
+        {% for key, value in votes.items %} 
+            <div class="well">
+                <li>{{key}} - {{value}}</li>
+            </div>
+        {% endfor %}
+
+        <!-- Show Comment button only if User is authenticated -->
+        {% if user.is_authenticated %}
+
+            <!-- Comment button -->
+            <a href="{% url 'blog:create_comment' post.pk %}" class="col-md-2 pull-right">
+                <button type="button" class="btn btn-primary btn-block">Vote</button>
+            </a>
+
+        {% endif %}
+
+    </div>
+{% endblock content %}
