@@ -80,4 +80,4 @@ We have used Django Web Development framework to implement our system. The follo
 2. Python libraries such as sklearn, numpy, nltk, gensim are used to implement tweet classification system.
 3. We have used facial_recognition python library, which uses state-of-the-art dlib face recognition and deep learning.
 4. Github is used for version control.
-5. Microsoft Azure is used for deployment.
+5. Microsoft Azure is used for deployment - http://13.68.200.167/.
