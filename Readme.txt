@@ -1,6 +1,7 @@
 ﻿Disaster Help Management Platform 
 
-
+Usage - run the following command :
+python manage.py stream
 
 
 Tweets Classification:
