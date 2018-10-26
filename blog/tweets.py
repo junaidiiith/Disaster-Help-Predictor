@@ -48,22 +48,28 @@ global classifier
 def predict(tweet,classifier):
     tweet = tweet_classifier.preprocess(tweet)
     cnt = 0
+    temp = np.zeros(100,1)
+    print(tweet)
     for w in tweet:
-        temp = np.add(temp,classifier[8].wv[w.lower()])
-        cnt += 1
+        if w in list(classifier[8].wv.vocab):
+            temp = np.add(temp,classifier[8].wv[w.lower()])
+            cnt += 1
     if cnt:
         embed_data = np.divide(temp,cnt)
 
+    print(embed_data)
     clfs = [0,2,4,6]
     pred = np.zeros(8)
     for i in clfs:
         pred += classifier[i+1]*classifier[i].predict_proba(embed_data)
+    print(pred)
     pred_label = np.argmax(pred)
     return classifier[9][pred_label]
 
 
 def addToDatabase(tweet,classifier):
     cl = predict(tweet[0],classifier)
+    print("printing class ",cl)
     text = tweet[0]
     location = tweet[1]
     if not location:
@@ -113,7 +119,10 @@ class MyListener(StreamListener):
         self.classifier = classifier     
     def on_data(self, data):
         try:
-            addToDatabase(clean_tweet(data),self.classifier)
+            data = clean_tweet(data)
+            print(data)
+            addToDatabase(data,self.classifier)
+            print("Added tweet!")
             self.count += 1
             if self.count%100 == 0:
                 self.classifier = reclassify()
@@ -128,4 +137,4 @@ class MyListener(StreamListener):
  
 #Set the hashtag to be searched
 twitter_stream = Stream(auth, MyListener(classifier))
-twitter_stream.filter(track=['#Life'])
+twitter_stream.filter(track=['#Disaster','#Floods',"#Hurricane","#BiharFloods"])

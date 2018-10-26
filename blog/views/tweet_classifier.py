@@ -142,21 +142,24 @@ def main(datafile,labelfile):
     x_train, x_test, y_train, y_test, train_text, test_text = train_test_split(
         embed_data,mapped_labels,final_text,test_size=0.2,random_state=15)
     gbdt = GradientBoostingClassifier(n_estimators=150,verbose=0)
-    gbdt_prob, gbdt_acc = classifier(x_train,y_train,x_test,y_test,gbdt,'gbdt',test_text,mappings)
+    # gbdt_prob, gbdt_acc = classifier(x_train,y_train,x_test,y_test,gbdt,'gbdt',test_text,mappings)
 
     knn = KNeighborsClassifier(n_neighbors=25)
-    knn_prob, knn_acc = classifier(x_train,y_train,x_test,y_test,knn,'knn',test_text,mappings)
+    # knn_prob, knn_acc = classifier(x_train,y_train,x_test,y_test,knn,'knn',test_text,mappings)
 
-    lr = LogisticRegression(verbose=0,max_iter=100)
+    lr = LogisticRegression(verbose=0,max_iter=10)
     lr_prob, lr_acc = classifier(x_train,y_train,x_test,y_test,lr,'lr',test_text,mappings)
 
     mlp = MLPClassifier(hidden_layer_sizes=(128, 64, 32),verbose=0,random_state=15)
-    mlp_prob, mlp_acc = classifier(x_train,y_train,x_test,y_test,mlp,'mlp',test_text,mappings)
-    fused_prob = np.add(gbdt_acc*normalize(gbdt_prob),knn_acc*normalize(knn_prob))
-    fused_prob = np.add(fused_prob,lr_acc*normalize(lr_prob))
-    fused_prob = np.add(fused_prob,mlp_acc*normalize(mlp_prob))
-
+    # mlp_prob, mlp_acc = classifier(x_train,y_train,x_test,y_test,mlp,'mlp',test_text,mappings)
+    # fused_prob = np.add(gbdt_acc*normalize(gbdt_prob),knn_acc*normalize(knn_prob))
+    # fused_prob = np.add(fused_prob,lr_acc*normalize(lr_prob))
+    # fused_prob = np.add(fused_prob,mlp_acc*normalize(mlp_prob))
+    fused_prob = lr_prob
+    gbdt = knn = mlp = lr
+    gbdt_acc = knn_acc = mlp_acc = lr_acc
     fused_pred = np.argmax(fused_prob,axis=1)
     mapped_pred = mappings[fused_pred]
+    print("Completed!!")
     return (gbdt,gbdt_acc,mlp,mlp_acc,lr,lr_acc,knn,knn_acc,model,mappings)
    
