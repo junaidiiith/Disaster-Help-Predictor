@@ -25,7 +25,7 @@ SECRET_KEY = '!4#q5!&k15_f#qe_kz-afv#qye_k+tekg1f2$%fxh6+a7l0y^8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['http://disasterhelppredictor.azurewebsites.net/']
 
 
 # Application definition
@@ -119,8 +119,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = '/static'
 
 ACCOUNT_LOGOUT_REDIRECT_URL = "/blog"
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
